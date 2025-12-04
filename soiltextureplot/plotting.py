@@ -62,11 +62,6 @@ def plot_soil_texture_classes(ax, classes=USDA):
 
     ax.grid(which="both")
 
-    # Remove default ternary axis labels
-    ax.set_tlabel("")  # clay axis label at top corner
-    ax.set_llabel("")  # sand axis label at left corner
-    ax.set_rlabel("")  # silt axis label at right corner
-
     # Add custom axis labels along edges
 
     # Sand (%) – bottom edge, centered, below triangle
@@ -113,7 +108,18 @@ def plot_soil_texture_classes(ax, classes=USDA):
 
 
 # -------------- main plotting function -------------- #
-def plot_soil_samples(df, sand_col="sand", silt_col="silt", clay_col="clay"):
+def plot_soil_samples(
+    df,
+    sand_col="sand",
+    silt_col="silt",
+    clay_col="clay",
+    size_by=None,
+    size_min=20,
+    size_max=120,
+    marker="o",
+    color="black",
+    alpha=0.6,
+):
     """
     Plot USDA soil texture triangle with sample points.
 
@@ -142,17 +148,40 @@ def plot_soil_samples(df, sand_col="sand", silt_col="silt", clay_col="clay"):
     l = df[sand_col].to_numpy()
     r = df[silt_col].to_numpy()
 
+    # size scaling
+    sizes = None
+    if size_by is not None and size_by in df.columns:
+        vals = df[size_by].to_numpy().astype(float)
+
+        # Handle constant or NaN-only column gracefully
+        valid = np.isfinite(vals)
+        if valid.any() and not np.allclose(vals[valid], vals[valid][0]):
+            vmin = vals[valid].min()
+            vmax = vals[valid].max()
+            # Normalize to [0, 1]
+            norm = (vals - vmin) / (vmax - vmin)
+            # Scale to [size_min, size_max]
+            sizes = size_min + norm * (size_max - size_min)
+        else:
+            # Fallback: constant size if no variation
+            sizes = np.full_like(vals, (size_min + size_max) / 2.0)
+    else:
+        # Default size if no size_by provided
+        sizes = size_min
+
     # Scatter points on top
     sc = ax.scatter(
         t,
         l,
         r,
-        c="black",
-        s=40,
-        edgecolors="white",
-        linewidths=0.5,
+        c=color,
+        marker=marker,
+        s=sizes,
+        # edgecolors="white",
+        # linewidths=0.5,
+        alpha=alpha,
         zorder=3.0,
-        label="Samples",
+        # label="Samples",
     )
 
     plt.tight_layout()
