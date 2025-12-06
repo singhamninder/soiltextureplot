@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 from matplotlib.ticker import AutoMinorLocator, MultipleLocator
 from matplotlib._cm import _Set3_data  # qualitative colors
-from soiltextureplot.datasets import USDA
+from soiltextureplot.datasets import USDA, HYPRES
 import mpltern
 
 
@@ -32,7 +32,7 @@ def calculate_centroid(vertices):
     return np.array([cx, cy])
 
 
-def plot_soil_texture_classes(ax, classes=USDA):
+def plot_soil_texture_classes(ax, classes=None):
     """Plot soil texture classes."""
 
     for (key, value), color in zip(classes.items(), _Set3_data):
@@ -74,7 +74,7 @@ def plot_soil_texture_classes(ax, classes=USDA):
         va="top",
         fontsize=12,
         rotation=0,
-        transform=ax.transTernaryAxes,  # use ternary coordinate system
+        transform=ax.transTernaryAxes,  # use ternary coordinate classification_system
     )
 
     # Clay (%) – left edge, centered, rotated up
@@ -110,6 +110,7 @@ def plot_soil_texture_classes(ax, classes=USDA):
 # -------------- main plotting function -------------- #
 def plot_soil_samples(
     df,
+    classification_system="USDA",
     sand_col="sand",
     silt_col="silt",
     clay_col="clay",
@@ -121,7 +122,7 @@ def plot_soil_samples(
     alpha=0.6,
 ):
     """
-    Plot USDA soil texture triangle with sample points.
+    Plot soil texture triangle with sample points.
 
     df: pandas DataFrame with sand, silt, clay columns (percent, summing ~100).
     """
@@ -140,8 +141,15 @@ def plot_soil_samples(
     fig = plt.figure(figsize=(7, 6))
     ax = fig.add_subplot(projection="ternary", ternary_sum=100.0)
 
-    # Plot USDA background
-    plot_soil_texture_classes(ax)
+    # Plot soil texture background
+    if classification_system == "USDA":
+        plot_soil_texture_classes(ax, classes=USDA)
+    elif classification_system == "HYPRES":
+        plot_soil_texture_classes(ax, classes=HYPRES)
+    else:
+        raise ValueError(
+            f"Unknown soil texture classification_system: {classification_system}"
+        )
 
     # Extract sample coordinates in order (t,l,r) = (clay, sand, silt)
     t = df[clay_col].to_numpy()
