@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "soiltextureplot"
+version = "0.1.0"
+description = "Soil texture triangle plotting and classification"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+  "streamlit",
+  "pandas",
+  "numpy",
+  "matplotlib",
+  "mpltern",
+]
+
+[tool.setuptools]
+packages = ["soiltextureplot"]

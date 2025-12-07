@@ -36,9 +36,9 @@ def plot_triangle_with_points(
     df,
     system: TextureSystem,
     size_by=None,
-    size_min=60,
-    size_max=120,
-    show_labels=True,
+    size_min=None,
+    size_max=None,
+    show_labels=None,
 ):
     import mpltern  # imported here so core doesn’t hard‑depend for non‑plot use
 

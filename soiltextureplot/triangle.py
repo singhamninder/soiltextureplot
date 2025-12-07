@@ -58,7 +58,7 @@ class SoilTextureTriangle:
     def plot(
         self,
         size_by: Optional[str] = None,
-        size_min: float = 20,
+        size_min: float = 30,
         size_max: float = 120,
         show_labels: bool = True,
     ):
