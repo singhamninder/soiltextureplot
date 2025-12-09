@@ -61,6 +61,7 @@ class SoilTextureTriangle:
         size_min: float = 30,
         size_max: float = 120,
         show_labels: bool = True,
+        cmap: str = None,
     ):
         """
         Plot current data on the soil texture triangle using mpltern.
@@ -75,4 +76,5 @@ class SoilTextureTriangle:
             size_min=size_min,
             size_max=size_max,
             show_labels=show_labels,
+            cmap=cmap,
         )
