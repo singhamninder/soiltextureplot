@@ -10,6 +10,7 @@ def main():
 
     systems = list_texture_systems()
     system_name = st.selectbox("Texture system", list(systems.keys()), index=0)
+    st.markdown(systems[system_name])
 
     # Get a list of all available colormaps from matplotlib
     available_cmaps = sorted(list(colormaps))
