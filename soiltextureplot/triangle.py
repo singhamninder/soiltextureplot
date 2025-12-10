@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import Optional
 
 from .systems import get_texture_system, TextureSystem
+from .classifier import PolygonClassifier
 from . import plotting
 
 
@@ -16,6 +17,7 @@ class SoilTextureTriangle:
 
     def __post_init__(self):
         self.system: TextureSystem = get_texture_system(self.system_name)
+        self._classifier = PolygonClassifier.from_system(self.system)
 
     # data loading
     def load_csv(
@@ -50,18 +52,23 @@ class SoilTextureTriangle:
         if self.df is None:
             raise ValueError("No data loaded. Call load_csv or load_dataframe first.")
 
-        # TODO: real classification; placeholder for now
-        self.df["texture_class"] = np.nan
+        clay = self.df["clay"].to_numpy()
+        sand = self.df["sand"].to_numpy()
+        silt = self.df["silt"].to_numpy()
+
+        classes = self._classifier.classify_points(clay, sand, silt)
+        self.df["texture_class"] = classes
         return self.df
 
     # plotting
     def plot(
         self,
         size_by: Optional[str] = None,
-        size_min: float = 30,
-        size_max: float = 120,
+        size_min: float = 40,
+        size_max: float = 160,
         show_labels: bool = True,
         cmap: str = None,
+        color_points: str = "black",
     ):
         """
         Plot current data on the soil texture triangle using mpltern.
@@ -77,4 +84,5 @@ class SoilTextureTriangle:
             size_max=size_max,
             show_labels=show_labels,
             cmap=cmap,
+            color_points=color_points,
         )

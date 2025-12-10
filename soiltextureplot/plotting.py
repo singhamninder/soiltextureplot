@@ -5,31 +5,7 @@ from matplotlib.ticker import AutoMinorLocator, MultipleLocator
 from matplotlib import colormaps
 
 from .systems import TextureSystem
-
-
-def calculate_centroid(vertices):
-    """
-    Compute centroid of a 2D polygon given an (N, 2) array of vertices.
-    Uses the standard shoelace formula (no np.cross).
-    """
-    x = vertices[:, 0]
-    y = vertices[:, 1]
-
-    # Close the polygon
-    x_next = np.roll(x, -1)
-    y_next = np.roll(y, -1)
-
-    cross = x * y_next - x_next * y
-    area = cross.sum() / 2.0
-
-    if np.isclose(area, 0.0):
-        # Fallback: simple mean if area is ~0 (degenerate polygon)
-        return np.array([x.mean(), y.mean()])
-
-    cx = ((x + x_next) * cross).sum() / (6.0 * area)
-    cy = ((y + y_next) * cross).sum() / (6.0 * area)
-
-    return np.array([cx, cy])
+from .utils import calculate_centroid
 
 
 def plot_triangle_with_points(
@@ -40,6 +16,7 @@ def plot_triangle_with_points(
     size_max=None,
     show_labels=None,
     cmap=None,
+    color_points=None,
 ):
     """
     Plot soil texture data on a ternary diagram.
@@ -80,7 +57,9 @@ def plot_triangle_with_points(
         t,
         l,
         r,
-        c="black",
+        c=color_points,
+        alpha=0.7,
+        edgecolors="none",
         s=sizes,
     )
 
