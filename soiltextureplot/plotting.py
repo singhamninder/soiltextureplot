@@ -76,7 +76,7 @@ def plot_triangle_with_points(
                 color="white",
             )
 
-    ax.set_title(f"{system.name} Soil Texture Triangle", pad=20)
+    ax.set_title(f"{system.name} Soil Texture Triangle", weight="bold", pad=20)
     fig.tight_layout()
     return fig, ax
 
