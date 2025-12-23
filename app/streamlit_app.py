@@ -27,9 +27,9 @@ def main():
     cols = list(df.columns)
 
     st.subheader("Column mapping")
-    clay_col = st.selectbox("Clay column", options=[""] + cols, index=0)
-    sand_col = st.selectbox("Sand column", options=[""] + cols, index=0)
-    silt_col = st.selectbox("Silt column", options=[""] + cols, index=0)
+    clay_col = st.selectbox("clay column", options=[""] + cols, index=0)
+    sand_col = st.selectbox("sand column", options=[""] + cols, index=0)
+    silt_col = st.selectbox("silt column", options=[""] + cols, index=0)
 
     # Validate selection
     missing = []
