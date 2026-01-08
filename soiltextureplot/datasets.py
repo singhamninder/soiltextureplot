@@ -1,4 +1,9 @@
-USDA_TEXTURE_CLASSES = {
+from typing import Dict, List, Annotated
+
+# Type alias for texture definitions: Name -> List of Polygon Vertices (Clay, Sand, Silt)
+TextureClasses = Dict[str, List[List[float]]]
+
+USDA_TEXTURE_CLASSES: TextureClasses = {
     "sand": [[10.0, 90.0, 0.0], [0.0, 100.0, 0.0], [0.0, 85.0, 15.0]],
     "loamy sand": [
         [15.0, 85.0, 0.0],
@@ -66,7 +71,7 @@ USDA_TEXTURE_CLASSES = {
     ],
 }
 
-HYPRES_TEXTURE_CLASSES = {
+HYPRES_TEXTURE_CLASSES: TextureClasses = {
     "coarse": [  # Coarse: 0 ≤ clay < 18, sand ≥ 65
         [18.0, 82.0, 0.0],
         [0.0, 100.0, 0.0],

@@ -1,10 +1,20 @@
 import numpy as np
 
 
-def calculate_centroid(vertices):
+def calculate_centroid(vertices: np.ndarray) -> np.ndarray:
     """
     Compute centroid of a 2D polygon given an (N, 2) array of vertices.
     Uses the standard shoelace formula (no np.cross).
+
+    Parameters
+    ----------
+    vertices : np.ndarray
+        Array of shape (N, 2) containing polygon vertices.
+
+    Returns
+    -------
+    np.ndarray
+        Array of shape (2,) containing the (x, y) centroid coordinates.
     """
     x = vertices[:, 0]
     y = vertices[:, 1]
@@ -26,11 +36,32 @@ def calculate_centroid(vertices):
     return np.array([cx, cy])
 
 
-def ternary_to_cartesian(clay, sand, silt, ternary_sum=100.0):
+def ternary_to_cartesian(
+    clay: np.ndarray,
+    sand: np.ndarray,
+    silt: np.ndarray,
+    ternary_sum: float = 100.0
+) -> np.ndarray:
     """
     Convert ternary coordinates (clay, sand, silt) to 2D Cartesian (x, y).
 
     Uses an equilateral triangle with side length = ternary_sum.
+
+    Parameters
+    ----------
+    clay : np.ndarray
+        Clay percentages.
+    sand : np.ndarray
+        Sand percentages.
+    silt : np.ndarray
+        Silt percentages.
+    ternary_sum : float, optional
+        The sum of the ternary components (default 100.0).
+
+    Returns
+    -------
+    np.ndarray
+        Array of shape (N, 2) containing Cartesian (x, y) coordinates.
     """
     clay = np.asarray(clay, dtype=float)
     sand = np.asarray(sand, dtype=float)

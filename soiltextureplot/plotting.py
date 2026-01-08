@@ -1,6 +1,11 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import pandas as pd
 
+from typing import Optional, Union, List, Tuple
+from matplotlib.figure import Figure
+from matplotlib.axes import Axes
+from matplotlib.colors import Colormap
 from matplotlib.ticker import AutoMinorLocator, MultipleLocator
 from matplotlib import colormaps
 
@@ -9,15 +14,15 @@ from .utils import calculate_centroid
 
 
 def plot_triangle_with_points(
-    df,
+    df: pd.DataFrame,
     system: TextureSystem,
-    size_by=None,
-    size_min=None,
-    size_max=None,
-    show_labels=None,
-    cmap=None,
-    color_points=None,
-):
+    size_by: Optional[str] = None,
+    size_min: Optional[float] = None,
+    size_max: Optional[float] = None,
+    show_labels: Optional[bool] = None,
+    cmap: Optional[Union[str, List[str], Colormap]] = None,
+    color_points: Optional[Union[str, List[str]]] = None,
+) -> Tuple[Figure, Axes]:
     """
     Plot soil texture data on a ternary diagram.
 
@@ -29,15 +34,24 @@ def plot_triangle_with_points(
         The soil texture classification system to use.
     size_by : str, optional
         Column name to use for sizing points.
-    size_min : int, optional
+    size_min : float, optional
         Minimum point size.
-    size_max : int, optional
+    size_max : float, optional
         Maximum point size.
     show_labels : bool, optional
         If True, show sample labels on points.
-    cmap : str or list, optional
+    cmap : str, list, or Colormap, optional
         Colormap for filling texture classes. Can be a matplotlib colormap name
         or a list of colors. Defaults to 'Set3_r'.
+    color_points : str or list, optional
+        Color for the scattered points.
+
+    Returns
+    -------
+    fig : Figure
+        The matplotlib Figure object.
+    ax : Axes
+        The matplotlib Axes object (ternary projection).
     """
     import mpltern  # imported here so core doesn’t hard‑depend for non‑plot use
 
@@ -53,7 +67,7 @@ def plot_triangle_with_points(
 
     sizes = _compute_sizes(df, size_by, size_min, size_max)
 
-    sc = ax.scatter(
+    ax.scatter(
         t,
         l,
         r,
@@ -81,8 +95,23 @@ def plot_triangle_with_points(
     return fig, ax
 
 
-def _plot_background_classes(ax, system: TextureSystem, cmap=None):
-    """Plots the texture class polygons in the background."""
+def _plot_background_classes(
+    ax: Axes,
+    system: TextureSystem,
+    cmap: Optional[Union[str, List[str], Colormap]] = None
+) -> None:
+    """
+    Plots the texture class polygons in the background.
+
+    Parameters
+    ----------
+    ax : Axes
+        The ternary axes to plot on.
+    system : TextureSystem
+        The system containing polygons to plot.
+    cmap : str, list, or Colormap, optional
+        Colormap to use for filling polygons.
+    """
     from itertools import cycle
 
     num_polygons = len(system.polygons)
@@ -113,7 +142,7 @@ def _plot_background_classes(ax, system: TextureSystem, cmap=None):
     if len(colors) < num_polygons:
         color_cycle = cycle(colors)
     else:
-        color_cycle = colors
+        color_cycle = colors  # type: ignore
 
     for (name, vertices), color in zip(system.polygons.items(), color_cycle):
         tn0, tn1, tn2 = np.array(vertices).T  # clay, sand, silt
@@ -192,9 +221,20 @@ def _plot_background_classes(ax, system: TextureSystem, cmap=None):
     ax.raxis.set_ticks_position("tick2")
 
 
-def _compute_sizes(df, size_by, size_min, size_max):
+def _compute_sizes(
+    df: pd.DataFrame,
+    size_by: Optional[str],
+    size_min: Optional[float],
+    size_max: Optional[float]
+) -> Union[float, np.ndarray]:
+    """Helper to compute point sizes based on a column."""
+    if size_min is None:
+        size_min = 20.0  # default fallback
     if size_by is None or size_by not in df.columns:
         return size_min
+
+    if size_max is None:
+        size_max = 100.0  # default fallback
 
     vals = df[size_by].to_numpy().astype(float)
     valid = np.isfinite(vals)
