@@ -21,12 +21,12 @@ utils
 """
 
 from .classifier import PolygonClassifier
-from .systems import TextureSystem, get_system
+from .systems import TextureSystem, get_texture_system
 from .plotting import plot_triangle_with_points
 
 __all__ = [
     "PolygonClassifier",
     "TextureSystem",
-    "get_system",
+    "get_texture_system",
     "plot_triangle_with_points",
 ]
