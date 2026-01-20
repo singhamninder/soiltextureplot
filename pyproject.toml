@@ -32,8 +32,8 @@ classifiers = [
 ]
 
 [project.urls]
-"Homepage" = "https://github.com/AmninderSingh/soiltextureplot"
-"Bug Tracker" = "https://github.com/AmninderSingh/soiltextureplot/issues"
+"Homepage" = "https://github.com/singhamninder/soiltextureplot"
+"Bug Tracker" = "https://github.com/singhamninder/soiltextureplot/issues"
 
 [tool.setuptools]
 packages = ["soiltextureplot"]
