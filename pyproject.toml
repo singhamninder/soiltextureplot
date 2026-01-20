@@ -9,7 +9,7 @@ description = "Soil texture triangle plotting and classification"
 readme = "README.md"
 license = { file = "LICENSE" }
 authors = [
-    { name = "Amninder Singh", email = "amnindersingh13@gmail.com" },
+    { name = "Amninder Singh", email = "amnindersingh13@gmail.com"},
 ]
 requires-python = ">=3.9"
 dependencies = [
@@ -27,16 +27,13 @@ classifiers = [
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
-    "Topic :: Scientific/Engineering :: Soil Science",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering",
 ]
 
 [project.urls]
 "Homepage" = "https://github.com/AmninderSingh/soiltextureplot"
 "Bug Tracker" = "https://github.com/AmninderSingh/soiltextureplot/issues"
-
-
-[project.optional-dependencies]
-app = ["streamlit>=1.15.0"]
 
 [tool.setuptools]
 packages = ["soiltextureplot"]
