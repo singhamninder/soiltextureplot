@@ -1,0 +1,61 @@
+---
+description: uv-managed Python 3.12 project layout and conventions
+alwaysApply: true
+---
+
+# Project Conventions
+
+This is a `uv`-managed Python 3.12 project. Follow these conventions when adding or modifying code.
+
+## Tooling
+
+- Dependency management: `uv` only. Do not use `pip install`, `poetry`, or `conda` in instructions.
+- Add deps: `uv add <pkg>` (runtime), `uv add --group dev <pkg>` (dev), `uv add --group ml <pkg>` (heavy ML).
+- Run commands inside the env with `uv run ...` (e.g. `uv run pytest`).
+- Lockfile (`uv.lock`) is committed; `.venv/` is not.
+- Target Python: `3.12` (set `requires-python = ">=3.12"` in `pyproject.toml`).
+
+## Layout
+
+Use a `src` layout. The import package lives under `src/<package>/`.
+
+```
+src/<package>/
+  data/       # loading, IO, schema validation at boundaries
+  features/   # deterministic transforms on validated data (only when relevant)
+  models/     # model definitions / training entry points (only when relevant)
+  tuning/     # hyperparameter / search logic (only when relevant)
+  cli/        # thin entry points; no business logic here
+  utils/      # small generic helpers; no project-specific logic
+config/*.yaml # runtime configuration (paths, hyperparams, etc.)
+tests/        # deterministic unit tests mirroring src/ layout
+notebooks/    # exploration only
+```
+
+Create subpackages only when they have real content. Don't scaffold empty folders.
+
+## Code Placement
+
+- Reusable logic lives in `src/<package>/`, never in notebooks.
+- Notebooks import from the package; they should be thin and runnable top-to-bottom.
+- CLI modules parse args and delegate to package functions; no logic inline.
+
+## Config
+
+- Runtime config goes in `config/*.yaml`. Load it at the boundary (CLI / entry point), validate it once, and pass a typed object (e.g. a `dataclass` or `pydantic` model) inward.
+- Do not read YAML or env vars from deep inside library code.
+
+## Dependency Groups
+
+Use optional groups in `pyproject.toml` to keep installs lean:
+
+- `dev`: `pytest`, `ruff`, `black`, `isort`, `mypy`, `nbqa`.
+- `ml`: heavy libs (e.g. `torch`, `xgboost`) that notebook/dev users may not need.
+
+Install: `uv sync --group dev` or `uv sync --all-groups`.
+
+## Tests
+
+- Put deterministic unit tests in `tests/`, mirroring the `src/` structure.
+- Seed RNGs in tests that touch randomness. No network, no wall-clock dependencies.
+- Run with `uv run pytest`.

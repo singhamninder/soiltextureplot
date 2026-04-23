@@ -21,6 +21,22 @@ This repository contains codebase for soil texture classification and visualizat
 - matplotlib
 - mpltern
 
+## Development
+
+```bash
+# Setup
+uv sync --group dev
+
+# Run tests
+uv run pytest
+
+# Build
+uv build
+
+# Publish (after updating version in pyproject.toml)
+uv publish
+```
+
 
 ## Web Application
 

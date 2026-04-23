@@ -27,6 +27,8 @@ env/
 
 # Testing
 .pytest_cache/
+.mypy_cache/
+.ruff_cache/
 .coverage
 htmlcov/
 
@@ -36,5 +38,6 @@ Thumbs.db
 
 # Project-specific
 *.csv
+!src/soiltextureplot/data/example_soil_data.csv
 *.html
 ~$*
