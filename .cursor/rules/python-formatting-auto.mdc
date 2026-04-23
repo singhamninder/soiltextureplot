@@ -1,0 +1,22 @@
+---
+description: Auto-run Python and notebook formatters after edits
+globs:
+  - "**/*.py"
+  - "**/*.ipynb"
+alwaysApply: true
+---
+
+# Python Formatting Automation
+
+When you edit Python or notebook files, run the formatters before finishing:
+
+1. Python files:
+   - `uv run isort --profile black <edited_python_files>`
+   - `uv run black <edited_python_files>`
+2. Notebook files:
+   - `uv run nbqa isort --profile black <edited_notebooks>`
+   - `uv run nbqa black <edited_notebooks>`
+
+If formatter commands modify files, re-run them until they are stable.
+
+Only format files touched by the current task unless the user asks for a broader sweep.

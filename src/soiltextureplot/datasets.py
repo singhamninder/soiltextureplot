@@ -1,4 +1,4 @@
-from typing import Dict, List, Annotated
+from typing import Annotated, Dict, List
 
 # Type alias for texture definitions: Name -> List of Polygon Vertices (Clay, Sand, Silt)
 TextureClasses = Dict[str, List[List[float]]]

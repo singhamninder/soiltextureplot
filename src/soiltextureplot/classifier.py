@@ -22,6 +22,7 @@ class PolygonClassifier:
     _class_order : List[str]
         Ordered list of class names for consistency.
     """
+
     system: TextureSystem
     _paths: Dict[str, Path]
     _class_order: List[str]
@@ -57,10 +58,7 @@ class PolygonClassifier:
         return cls(system=system, _paths=paths, _class_order=class_order)
 
     def classify_points(
-        self,
-        clay: np.ndarray,
-        sand: np.ndarray,
-        silt: np.ndarray
+        self, clay: np.ndarray, sand: np.ndarray, silt: np.ndarray
     ) -> np.ndarray:
         """
         Classify many points at once.

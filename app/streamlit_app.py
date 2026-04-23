@@ -1,8 +1,9 @@
-import streamlit as st
 import pandas as pd
-from soiltextureplot.triangle import SoilTextureTriangle
-from soiltextureplot.systems import list_texture_systems
+import streamlit as st
 from matplotlib import colormaps
+
+from soiltextureplot.systems import list_texture_systems
+from soiltextureplot.triangle import SoilTextureTriangle
 
 
 def main():

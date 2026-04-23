@@ -1,13 +1,13 @@
-import numpy as np
-import matplotlib.pyplot as plt
-import pandas as pd
+from typing import List, Optional, Tuple, Union
 
-from typing import Optional, Union, List, Tuple
-from matplotlib.figure import Figure
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+from matplotlib import colormaps
 from matplotlib.axes import Axes
 from matplotlib.colors import Colormap
+from matplotlib.figure import Figure
 from matplotlib.ticker import AutoMinorLocator, MultipleLocator
-from matplotlib import colormaps
 
 from .systems import TextureSystem
 from .utils import calculate_centroid
@@ -98,7 +98,7 @@ def plot_triangle_with_points(
 def _plot_background_classes(
     ax: Axes,
     system: TextureSystem,
-    cmap: Optional[Union[str, List[str], Colormap]] = None
+    cmap: Optional[Union[str, List[str], Colormap]] = None,
 ) -> None:
     """
     Plots the texture class polygons in the background.
@@ -225,7 +225,7 @@ def _compute_sizes(
     df: pd.DataFrame,
     size_by: Optional[str],
     size_min: Optional[float],
-    size_max: Optional[float]
+    size_max: Optional[float],
 ) -> Union[float, np.ndarray]:
     """Helper to compute point sizes based on a column."""
     if size_min is None:

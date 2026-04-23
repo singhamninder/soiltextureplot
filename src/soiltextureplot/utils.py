@@ -37,10 +37,7 @@ def calculate_centroid(vertices: np.ndarray) -> np.ndarray:
 
 
 def ternary_to_cartesian(
-    clay: np.ndarray,
-    sand: np.ndarray,
-    silt: np.ndarray,
-    ternary_sum: float = 100.0
+    clay: np.ndarray, sand: np.ndarray, silt: np.ndarray, ternary_sum: float = 100.0
 ) -> np.ndarray:
     """
     Convert ternary coordinates (clay, sand, silt) to 2D Cartesian (x, y).

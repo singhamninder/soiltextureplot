@@ -1,15 +1,15 @@
-import numpy as np
-import pandas as pd
-
 from dataclasses import dataclass, field
 from pathlib import Path as PathLibPath
-from typing import Optional, Union, TYPE_CHECKING
-from matplotlib.figure import Figure
-from matplotlib.axes import Axes
+from typing import TYPE_CHECKING, Optional, Union
 
-from .systems import get_texture_system, TextureSystem
-from .classifier import PolygonClassifier
+import numpy as np
+import pandas as pd
+from matplotlib.axes import Axes
+from matplotlib.figure import Figure
+
 from . import plotting
+from .classifier import PolygonClassifier
+from .systems import TextureSystem, get_texture_system
 
 if TYPE_CHECKING:
     # Avoid circular import at runtime by only importing for type checking if needed
@@ -28,6 +28,7 @@ class SoilTextureTriangle:
     df : pd.DataFrame, optional
         Initial DataFrame. Can be set later via load functions.
     """
+
     system_name: str = "USDA"
     df: Optional[pd.DataFrame] = field(default=None, repr=False)
 
