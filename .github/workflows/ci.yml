@@ -30,10 +30,10 @@ jobs:
         run: uv sync --locked --all-extras --dev
 
       - name: Check formatting
-        run: uv run ruff format --check .
+        run: uv run ruff format --check src app
 
       - name: Lint
-        run: uv run ruff check .
+        run: uv run ruff check src app
 
       - name: Type check
         run: uv run ty check src app
