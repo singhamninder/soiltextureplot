@@ -1,5 +1,6 @@
 from dataclasses import dataclass
-from typing import List, Dict, Mapping, Any, Optional
+from typing import Any, Dict, Mapping
+
 from . import datasets
 
 
@@ -17,6 +18,7 @@ class TextureSystem:
     meta : Mapping[str, Any]
         Metadata about the system (description, citation, etc.).
     """
+
     name: str
     polygons: Mapping[str, Any]
     meta: Mapping[str, Any]

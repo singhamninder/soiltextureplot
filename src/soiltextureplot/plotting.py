@@ -1,16 +1,37 @@
-import numpy as np
-import matplotlib.pyplot as plt
-import pandas as pd
+from typing import Any, List, Optional, Protocol, Tuple, Union, cast
 
-from typing import Optional, Union, List, Tuple
-from matplotlib.figure import Figure
+import matplotlib.pyplot as plt
+import mpltern  # noqa: F401  # Registers the "ternary" Matplotlib projection.
+import numpy as np
+import pandas as pd
+from matplotlib import colormaps
 from matplotlib.axes import Axes
 from matplotlib.colors import Colormap
+from matplotlib.figure import Figure
 from matplotlib.ticker import AutoMinorLocator, MultipleLocator
-from matplotlib import colormaps
 
 from .systems import TextureSystem
 from .utils import calculate_centroid
+
+
+class TernaryAxisLike(Protocol):
+    """Typed subset of mpltern axis API used in this module."""
+
+    taxis: Any
+    laxis: Any
+    raxis: Any
+    transData: Any
+    transTernaryAxes: Any
+
+    def scatter(self, *args: Any, **kwargs: Any) -> Any: ...
+
+    def fill(self, *args: Any, **kwargs: Any) -> list[Any]: ...
+
+    def text(self, *args: Any, **kwargs: Any) -> Any: ...
+
+    def set_title(self, *args: Any, **kwargs: Any) -> Any: ...
+
+    def grid(self, *args: Any, **kwargs: Any) -> Any: ...
 
 
 def plot_triangle_with_points(
@@ -53,23 +74,22 @@ def plot_triangle_with_points(
     ax : Axes
         The matplotlib Axes object (ternary projection).
     """
-    import mpltern  # imported here so core doesn’t hard‑depend for non‑plot use
 
     fig = plt.figure(figsize=(7, 6))
-    ax = fig.add_subplot(projection="ternary", ternary_sum=100.0)
+    ax = cast(TernaryAxisLike, fig.add_subplot(projection="ternary", ternary_sum=100.0))
 
     _plot_background_classes(ax, system, cmap=cmap)
 
     # coordinates in ternary order (clay, sand, silt)
     t = df["clay"].to_numpy()
-    l = df["sand"].to_numpy()
+    left = df["sand"].to_numpy()
     r = df["silt"].to_numpy()
 
     sizes = _compute_sizes(df, size_by, size_min, size_max)
 
     ax.scatter(
         t,
-        l,
+        left,
         r,
         c=color_points,
         alpha=0.7,
@@ -78,7 +98,7 @@ def plot_triangle_with_points(
     )
 
     if show_labels and "sample_id" in df.columns:
-        for (_, row), tt, ll, rr in zip(df.iterrows(), t, l, r):
+        for (_, row), tt, ll, rr in zip(df.iterrows(), t, left, r):
             ax.text(
                 tt,
                 ll,
@@ -92,13 +112,13 @@ def plot_triangle_with_points(
 
     ax.set_title(f"{system.name} Soil Texture Triangle", weight="bold", pad=20)
     fig.tight_layout()
-    return fig, ax
+    return fig, cast(Axes, ax)
 
 
 def _plot_background_classes(
-    ax: Axes,
+    ax: TernaryAxisLike,
     system: TextureSystem,
-    cmap: Optional[Union[str, List[str], Colormap]] = None
+    cmap: Optional[Union[str, List[str], Colormap]] = None,
 ) -> None:
     """
     Plots the texture class polygons in the background.
@@ -139,10 +159,11 @@ def _plot_background_classes(
 
     # Cycle through colors if not enough are provided for the polygons.
     # This is a safeguard, though resampled() should give the correct number.
+    assert colors is not None
     if len(colors) < num_polygons:
         color_cycle = cycle(colors)
     else:
-        color_cycle = colors  # type: ignore
+        color_cycle = colors
 
     for (name, vertices), color in zip(system.polygons.items(), color_cycle):
         tn0, tn1, tn2 = np.array(vertices).T  # clay, sand, silt
@@ -225,7 +246,7 @@ def _compute_sizes(
     df: pd.DataFrame,
     size_by: Optional[str],
     size_min: Optional[float],
-    size_max: Optional[float]
+    size_max: Optional[float],
 ) -> Union[float, np.ndarray]:
     """Helper to compute point sizes based on a column."""
     if size_min is None:

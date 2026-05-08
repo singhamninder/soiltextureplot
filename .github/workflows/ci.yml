@@ -1,0 +1,45 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  quality-and-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.12"
+
+      - name: Cache uv artifacts
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/uv
+            .venv
+          key: ${{ runner.os }}-py312-uv-${{ hashFiles('uv.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-py312-uv-
+
+      - name: Install dependencies
+        run: uv sync --locked --all-extras --dev
+
+      - name: Check formatting
+        run: uv run ruff format --check src app
+
+      - name: Lint
+        run: uv run ruff check src app
+
+      - name: Type check
+        run: uv run ty check src app
+
+      - name: Run tests
+        run: uv run pytest
+
+      - name: Prune uv cache
+        run: uv cache prune --ci

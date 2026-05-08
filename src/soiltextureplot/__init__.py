@@ -21,8 +21,8 @@ utils
 """
 
 from .classifier import PolygonClassifier
-from .systems import TextureSystem, get_texture_system
 from .plotting import plot_triangle_with_points
+from .systems import TextureSystem, get_texture_system
 
 __all__ = [
     "PolygonClassifier",
