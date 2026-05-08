@@ -27,6 +27,20 @@ This repository contains codebase for soil texture classification and visualizat
 # Setup
 uv sync --group dev
 
+# Install git pre-commit hook
+uv run pre-commit install
+
+# Run all pre-commit checks on the repository
+uv run pre-commit run --all-files
+
+# Run one hook manually (example: ruff)
+uv run pre-commit run ruff --all-files
+
+# CI-style check-only quality commands (no auto-fixes)
+uv run ruff format --check .
+uv run ruff check .
+uv run ty check src app
+
 # Run tests
 uv run pytest
 
@@ -35,6 +49,26 @@ uv build
 
 # Publish (after updating version in pyproject.toml)
 uv publish
+```
+
+## Notebook Workflows (Pilot)
+
+During the Marimo pilot, both notebook paths are supported:
+
+- Jupyter notebook remains available at `texture_plot.ipynb`
+- Marimo notebook copy is available at `notebooks/texture_plot_marimo.py`
+- Keep existing `nbqa` checks for `.ipynb` files during this phase
+
+Run the Marimo notebook:
+
+```bash
+uv run marimo edit notebooks/texture_plot_marimo.py
+```
+
+Run the existing Jupyter notebook:
+
+```bash
+uv run jupyter notebook texture_plot.ipynb
 ```
 
 

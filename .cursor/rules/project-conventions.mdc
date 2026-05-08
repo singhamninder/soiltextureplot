@@ -13,8 +13,8 @@ This is a `uv`-managed Python project. Follow these conventions when adding or m
 - Add deps: `uv add <pkg>` (runtime), `uv add --group dev <pkg>` (dev).
 - Run commands inside the env with `uv run ...` (e.g. `uv run pytest`).
 - Lockfile (`uv.lock`) is committed; `.venv/` is not.
-- Package Python support is defined in `pyproject.toml` (`requires-python = ">=3.9"`).
-- Local/dev interpreter is pinned via `.python-version` (`3.11`).
+- Package Python support is defined in `pyproject.toml` (`requires-python = ">=3.12"`).
+- Local/dev interpreter is pinned via `.python-version` (`3.12`).
 
 ## Layout
 
@@ -49,6 +49,21 @@ Use dependency groups in `pyproject.toml` to keep installs lean:
 - `dev`: currently includes `pytest`, `pytest-cov`, `ruff`, `mypy`, `black`, `isort`, and `nbqa`.
 
 Install: `uv sync --group dev`.
+
+## Build & Publish
+
+- Build packages from repo root with `uv build` (artifacts go to `dist/` and should not be committed).
+- Before publishing, run `uv build --no-sources` as a parity check for registry-style builds.
+- Publish with `uv publish`.
+- Manage release versions with `uv version`:
+  - inspect current version: `uv version`
+  - preview update: `uv version <new-version> --dry-run`
+  - bump semver component: `uv version --bump patch` (or `minor` / `major`)
+- For publishing auth, prefer `UV_PUBLISH_TOKEN` or trusted publishing in CI.
+- If publishing to a configured custom index, use `uv publish --index <name>` and ensure `pyproject.toml` is present in the publish job.
+- If a publish partially succeeds, re-run the same publish command; avoid creating mismatched artifacts for the same version.
+- After publish, smoke-test install/import from index (not local project):
+  - `uv run --with soiltextureplot --no-project -- python -c "import soiltextureplot"`
 
 ## Tests
 

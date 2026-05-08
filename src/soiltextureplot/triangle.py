@@ -2,7 +2,6 @@ from dataclasses import dataclass, field
 from pathlib import Path as PathLibPath
 from typing import TYPE_CHECKING, Optional, Union
 
-import numpy as np
 import pandas as pd
 from matplotlib.axes import Axes
 from matplotlib.figure import Figure

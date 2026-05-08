@@ -77,17 +77,17 @@ def main():
     if uploaded is not None:
         tri = SoilTextureTriangle(system_name=system_name)
         tri.load_dataframe(df, sand_col=sand_col, silt_col=silt_col, clay_col=clay_col)
-        tri.classify()
+        classified = tri.classify()
         fig, ax = tri.plot(size_by=size_by or None, cmap=cmap_selection)
         st.pyplot(fig)
         st.download_button(
             "Download classified CSV",
-            data=tri.df.to_csv(index=False),
+            data=classified.to_csv(index=False),
             file_name="classified_soil_texture.csv",
             mime="text/csv",
         )
         st.markdown("**Preview of your classified data:**")
-        st.write(tri.df.head())
+        st.write(classified.head())
 
 
 if __name__ == "__main__":

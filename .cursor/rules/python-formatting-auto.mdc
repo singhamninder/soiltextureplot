@@ -1,22 +1,47 @@
 ---
-description: Auto-run Python and notebook formatters after edits
+description: Auto-run Python quality tools on edited Python and notebook files
 globs:
   - "**/*.py"
   - "**/*.ipynb"
 alwaysApply: true
 ---
 
-# Python Formatting Automation
+# Python Quality Automation
 
-When you edit Python or notebook files, run the formatters before finishing:
+When you edit Python or notebook files, run quality tools on the files touched by the current task before finishing.
 
-1. Python files:
-   - `uv run isort --profile black <edited_python_files>`
-   - `uv run black <edited_python_files>`
-2. Notebook files:
-   - `uv run nbqa isort --profile black <edited_notebooks>`
-   - `uv run nbqa black <edited_notebooks>`
+## Python files
 
-If formatter commands modify files, re-run them until they are stable.
+1. Lint, sort imports, and apply safe auto-fixes:
+   - `uv run ruff check --fix <edited_python_files>`
 
-Only format files touched by the current task unless the user asks for a broader sweep.
+2. Format:
+   - `uv run ruff format <edited_python_files>`
+
+3. Re-run Ruff checks if fixes were applied until the file set is stable.
+
+## Notebook files
+
+1. If the project uses nbqa:
+   - `uv run nbqa ruff <edited_notebooks> --fix`
+   - `uv run nbqa ruff format <edited_notebooks>`
+
+2. Otherwise, use the repo’s configured notebook formatting workflow.
+
+## Type checking
+
+- Run type checks with `ty` on the narrowest relevant scope:
+  - `uv run ty check <relevant_paths>`
+
+## Tests
+
+- Run tests for touched areas:
+  - `uv run pytest <narrow_scope>`
+- If scope is unclear or changes are cross-cutting, run:
+  - `uv run pytest`
+
+## Scope and stability
+
+- Only run tools on files touched by the current task unless the user asks for a broader sweep.
+- If auto-fixers modify files, re-run them until stable.
+- Prefer the repository’s existing toolchain and configuration if it conflicts with this default.
