@@ -2,7 +2,7 @@
 
 [![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://soiltextureplot.streamlit.app/)
 
-This repository contains codebase for soil texture classification and visualization using ternary diagrams. It provides tools to plot soil texture data on texture triangles and classify soil samples according to different classification systems.
+`soiltextureplot` is a Python package for soil texture classification and visualization with ternary diagrams.
 
 ## Features
 
@@ -13,13 +13,105 @@ This repository contains codebase for soil texture classification and visualizat
 - **Point Classification**: Automatic classification of soil samples into texture classes
 - **Customizable Visualization**: Control point sizes, colors, and labels
 
-## Dependencies
+## Install
 
-- streamlit
-- pandas
-- numpy
-- matplotlib
-- mpltern
+Install with `uv`:
+
+```bash
+uv add soiltextureplot
+```
+
+Install with `pip`:
+
+```bash
+pip install soiltextureplot
+```
+
+Optional app extras:
+
+```bash
+pip install "soiltextureplot[app]"
+```
+
+## Quick Usage
+
+```python
+import pandas as pd
+from soiltextureplot.triangle import SoilTextureTriangle
+
+example_df = pd.DataFrame(
+    {
+        "sample_id": ["S1", "S2", "S3", "S4"],
+        "sand": [75, 65, 45, 35],
+        "silt": [15, 20, 35, 40],
+        "clay": [10, 15, 20, 25],
+        "BD": [1.35, 1.42, 1.20, 1.18],
+    }
+)
+
+tri = SoilTextureTriangle(system_name="USDA")
+tri.load_dataframe(example_df)
+classified = tri.classify()
+fig, ax = tri.plot(size_by="BD", cmap="viridis")
+```
+
+## Documentation
+
+Full package docs are available on GitHub Pages:
+
+- [https://singhamninder.github.io/soiltextureplot/](https://singhamninder.github.io/soiltextureplot/)
+
+## Data Format
+
+Your CSV file should contain soil texture data with percentages of sand, silt, and clay. The percentages should sum to 100% for each sample.
+
+Example data format:
+
+```csv
+sample_id,sand,silt,clay
+S1,65,20,15
+S2,70,24,6
+S3,75,21,4
+```
+
+## Supported Classification Systems
+
+### USDA (United States Department of Agriculture)
+
+The standard USDA soil texture classification system with 12 texture classes.
+
+### HYPRES (HYdraulic PRoperties of European Soils)
+
+A European framework for classifying soils based on their hydrologic properties.
+
+## Web Application
+
+The Streamlit web app allows you to:
+
+- Upload CSV files with soil texture data
+- Map columns to sand, silt, and clay percentages
+- Visualize data on interactive texture triangles
+- Customize plot appearance
+
+## Notebook Workflows (Pilot)
+
+During the Marimo pilot, both notebook paths are supported:
+
+- Jupyter notebook remains available at `texture_plot.ipynb`
+- Marimo notebook copy is available at `notebooks/texture_plot_marimo.py`
+- Keep existing `nbqa` checks for `.ipynb` files during this phase
+
+Run the Marimo notebook:
+
+```bash
+uv run marimo edit notebooks/texture_plot_marimo.py
+```
+
+Run the existing Jupyter notebook:
+
+```bash
+uv run jupyter notebook texture_plot.ipynb
+```
 
 ## Development
 
@@ -61,107 +153,7 @@ Publishing is automated via tag-triggered workflows:
 Both workflows verify that the git tag version matches `uv version --short` before publishing.
 Both workflows also run isolated wheel and source-distribution smoke tests (`import soiltextureplot`) before upload.
 
-### Trusted publishing prerequisites
-
-Before pushing release tags, configure trusted publishing:
-
-1. In GitHub, create environments named `pypi` and `testpypi` under repository settings.
-2. In PyPI project settings, add a trusted publisher matching this repository and the `publish-pypi.yml` workflow.
-3. In TestPyPI project settings, add a trusted publisher matching this repository and the `publish-testpypi.yml` workflow.
-
-### Prerelease to TestPyPI
-
-```bash
-# Example: bump to prerelease version
-uv version 0.1.2rc1
-git add pyproject.toml uv.lock
-git commit -m "Bump version to 0.1.2rc1"
-git push origin dev
-
-# After merge to main, create and push prerelease tag from main
-git checkout main
-git pull
-git tag -a v0.1.2rc1 -m "Release v0.1.2rc1"
-git push origin v0.1.2rc1
-```
-
-Smoke test from TestPyPI:
-
-```bash
-uv run --with "soiltextureplot==0.1.2rc1" --no-project -- python -c "import soiltextureplot"
-```
-
-### Stable release to PyPI
-
-```bash
-# Example: bump stable version
-uv version --bump patch
-git add pyproject.toml uv.lock
-git commit -m "Bump version"
-git push origin dev
-
-# After merge to main, create and push stable tag from main
-git checkout main
-git pull
-git tag -a v0.1.2 -m "Release v0.1.2"
-git push origin v0.1.2
-```
-
-Smoke test from PyPI:
-
-```bash
-uv run --with soiltextureplot --no-project -- python -c "import soiltextureplot"
-```
-
-## Notebook Workflows (Pilot)
-
-During the Marimo pilot, both notebook paths are supported:
-
-- Jupyter notebook remains available at `texture_plot.ipynb`
-- Marimo notebook copy is available at `notebooks/texture_plot_marimo.py`
-- Keep existing `nbqa` checks for `.ipynb` files during this phase
-
-Run the Marimo notebook:
-
-```bash
-uv run marimo edit notebooks/texture_plot_marimo.py
-```
-
-Run the existing Jupyter notebook:
-
-```bash
-uv run jupyter notebook texture_plot.ipynb
-```
-
-
-## Web Application
-
-The web app allows you to:
-- Upload CSV files with soil texture data
-- Map columns to sand, silt, and clay percentages
-- Visualize data on interactive texture triangles
-- Customize plot appearance
-
-## Supported Classification Systems
-
-### USDA (United States Department of Agriculture)
-The standard USDA soil texture classification system with 12 texture classes.
-
-### HYPRES (HYdraulic PRoperties of European Soils)
-A European framework for classifying soils based on their hydrologic properties.
-
-## Data Format
-
-Your CSV file should contain soil texture data with percentages of sand, silt, and clay. The percentages should sum to 100% for each sample.
-
-Example data format:
-
-```csv
-sample_id,sand,silt,clay
-S1,65,20,15
-S2,70,24,6
-S3,75,21,4
-```
+For maintainers, full trusted-publishing and release steps are documented in [`docs/releasing.md`](docs/releasing.md).
 
 ## Acknowledgments
 
