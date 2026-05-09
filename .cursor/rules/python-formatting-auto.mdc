@@ -27,11 +27,14 @@ When you edit Python or notebook files, run quality tools on the files touched b
    - `uv run nbqa ruff format <edited_notebooks>`
 
 2. Otherwise, use the repo’s configured notebook formatting workflow.
+3. Marimo notebook scripts (`notebooks/*.py`) follow the Python-file Ruff flow above, not `nbqa`.
 
 ## Type checking
 
 - Run type checks with `ty` on the narrowest relevant scope:
   - `uv run ty check <relevant_paths>`
+- If scope is unclear in this repo, default to:
+  - `uv run ty check src app`
 
 ## Tests
 
@@ -45,3 +48,4 @@ When you edit Python or notebook files, run quality tools on the files touched b
 - Only run tools on files touched by the current task unless the user asks for a broader sweep.
 - If auto-fixers modify files, re-run them until stable.
 - Prefer the repository’s existing toolchain and configuration if it conflicts with this default.
+- In CI, prefer check-only commands (`ruff format --check`, `ruff check`, `ty check`) and avoid auto-fix flags.
