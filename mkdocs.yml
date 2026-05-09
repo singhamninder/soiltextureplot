@@ -1,0 +1,26 @@
+site_name: Soil Texture Plot
+site_description: Soil texture triangle plotting and classification
+site_url: https://singhamninder.github.io/soiltextureplot/
+repo_url: https://github.com/singhamninder/soiltextureplot
+repo_name: singhamninder/soiltextureplot
+
+theme:
+  name: material
+  features:
+    - navigation.tabs
+    - navigation.top
+    - content.code.copy
+
+markdown_extensions:
+  - admonition
+  - pymdownx.superfences
+  - toc:
+      permalink: true
+
+nav:
+  - Home: index.md
+  - Installation: installation.md
+  - Quickstart: quickstart.md
+  - API Overview: api.md
+
+strict: true

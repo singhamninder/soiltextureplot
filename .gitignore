@@ -41,3 +41,4 @@ Thumbs.db
 !src/soiltextureplot/data/example_soil_data.csv
 *.html
 ~$*
+site/

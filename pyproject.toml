@@ -52,4 +52,7 @@ dev = [
   "marimo>=0.17.6",
   "ty>=0.0.34",
   "pre-commit>=4.3.0",
+  "mkdocs>=1.6.1",
+  "mkdocs-material>=9.7.6",
+  "mkdocstrings[python]>=1.0.4",
 ]
