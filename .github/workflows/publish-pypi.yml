@@ -4,12 +4,13 @@ on:
   push:
     tags:
       - "v*.*.*"
-    tags-ignore:
-      - "v*rc*"
 
 jobs:
   publish-pypi:
+    if: ${{ !contains(github.ref_name, 'rc') }}
     runs-on: ubuntu-latest
+    environment:
+      name: pypi
     permissions:
       id-token: write
       contents: read
@@ -36,6 +37,12 @@ jobs:
 
       - name: Build distributions
         run: uv build --no-sources
+
+      - name: Smoke test wheel
+        run: uv run --isolated --no-project --with dist/*.whl python -c "import soiltextureplot"
+
+      - name: Smoke test source distribution
+        run: uv run --isolated --no-project --with dist/*.tar.gz python -c "import soiltextureplot"
 
       - name: Publish to PyPI
         run: uv publish --trusted-publishing always

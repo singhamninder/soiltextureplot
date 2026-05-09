@@ -8,6 +8,8 @@ on:
 jobs:
   publish-testpypi:
     runs-on: ubuntu-latest
+    environment:
+      name: testpypi
     permissions:
       id-token: write
       contents: read
@@ -34,6 +36,12 @@ jobs:
 
       - name: Build distributions
         run: uv build --no-sources
+
+      - name: Smoke test wheel
+        run: uv run --isolated --no-project --with dist/*.whl python -c "import soiltextureplot"
+
+      - name: Smoke test source distribution
+        run: uv run --isolated --no-project --with dist/*.tar.gz python -c "import soiltextureplot"
 
       - name: Publish to TestPyPI
         run: uv publish --trusted-publishing always --publish-url https://test.pypi.org/legacy/ --check-url https://test.pypi.org/simple/

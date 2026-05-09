@@ -56,9 +56,18 @@ uv publish
 Publishing is automated via tag-triggered workflows:
 
 - `v*rc*` tags publish to TestPyPI
-- `v*.*.*` tags publish to PyPI (excluding `v*rc*`)
+- `v*.*.*` tags are evaluated for PyPI; tags containing `rc` are skipped by workflow condition
 
 Both workflows verify that the git tag version matches `uv version --short` before publishing.
+Both workflows also run isolated wheel and source-distribution smoke tests (`import soiltextureplot`) before upload.
+
+### Trusted publishing prerequisites
+
+Before pushing release tags, configure trusted publishing:
+
+1. In GitHub, create environments named `pypi` and `testpypi` under repository settings.
+2. In PyPI project settings, add a trusted publisher matching this repository and the `publish-pypi.yml` workflow.
+3. In TestPyPI project settings, add a trusted publisher matching this repository and the `publish-testpypi.yml` workflow.
 
 ### Prerelease to TestPyPI
 
