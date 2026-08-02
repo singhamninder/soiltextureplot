@@ -18,6 +18,7 @@ dependencies = [
   "numpy>=1.23.0",
   "matplotlib>=3.7.0",
   "mpltern>=1.0.0",
+  "typer>=0.27.0",
 ]
 keywords = ["soil", "texture", "triangle", "plot", "classification", "ternary"]
 classifiers = [
@@ -31,6 +32,9 @@ classifiers = [
 [project.urls]
 "Homepage" = "https://github.com/singhamninder/soiltextureplot"
 "Bug Tracker" = "https://github.com/singhamninder/soiltextureplot/issues"
+
+[project.scripts]
+soiltextureplot = "soiltextureplot.cli:app"
 
 [project.optional-dependencies]
 app = [

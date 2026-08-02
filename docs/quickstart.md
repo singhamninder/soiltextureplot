@@ -35,3 +35,15 @@ tri = SoilTextureTriangle(system_name="HYPRES")
 ```
 
 Then load the same DataFrame and call `plot()` again.
+
+## CLI Quickstart
+
+With a CSV that has `sand`, `silt`, and `clay` columns:
+
+```bash
+soiltextureplot classify data.csv -o classified.csv
+soiltextureplot plot data.csv --size-by BD -o triangle.png
+soiltextureplot run data.csv -o classified.csv -f triangle.png --system USDA
+```
+
+See the [CLI reference](cli.md) for all flags.

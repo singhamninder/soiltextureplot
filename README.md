@@ -8,6 +8,7 @@
 
 - **Ternary Plotting**: Visualize soil texture data on interactive ternary diagrams
 - **Multiple Classification Systems**: Support for USDA and HYPRES soil texture classification systems
+- **Command-Line Interface**: Classify CSVs and save texture triangle plots with `soiltextureplot`
 - **Interactive Web App**: Streamlit-based application for easy data upload and visualization
 - **Flexible Data Input**: Support for CSV files with customizable column mapping
 - **Point Classification**: Automatic classification of soil samples into texture classes
@@ -53,6 +54,15 @@ tri = SoilTextureTriangle(system_name="USDA")
 tri.load_dataframe(example_df)
 classified = tri.classify()
 fig, ax = tri.plot(size_by="BD", cmap="viridis")
+```
+
+### CLI
+
+```bash
+soiltextureplot list-systems
+soiltextureplot classify data.csv -o classified.csv
+soiltextureplot plot data.csv --size-by BD -o triangle.png
+soiltextureplot run data.csv -o classified.csv -f triangle.png
 ```
 
 ## Documentation

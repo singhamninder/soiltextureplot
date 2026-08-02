@@ -21,6 +21,7 @@ nav:
   - Home: index.md
   - Installation: installation.md
   - Quickstart: quickstart.md
+  - CLI: cli.md
   - API Overview: api.md
 
 strict: true

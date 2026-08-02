@@ -30,4 +30,5 @@ pip install "soiltextureplot[app]"
 
 ```bash
 python -c "import soiltextureplot; print('soiltextureplot installed')"
+soiltextureplot list-systems
 ```
